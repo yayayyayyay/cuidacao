@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-font="default">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#159947" />
+  <title>cuidAÇÃO — Saúde, Meio Ambiente e Proteção Animal</title>
+
+  <!-- Favicon Oficial -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23159947'/%3E%3Cpath d='M48 14 C28 18 18 36 23 56 C26 67 36 74 47 76 C47 56 44 37 36 26 C41 34 46 49 48 68 C51 47 52 27 48 14 Z' fill='white'/%3E%3Cpath d='M51 31 C56 23 68 23 75 30 C82 37 81 50 71 61 C64 68 55 74 49 78 C48 61 48 44 51 31 Z' fill='white'/%3E%3Cpath d='M12 58 C10 68 15 79 25 86 L42 96 C45 98 47 95 46 92 L43 85 C42 82 39 80 35 78 L23 70 C19 67 17 62 17 57 C17 54 13 54 12 58 Z' fill='white'/%3E%3Cpath d='M88 58 C90 68 85 79 75 86 L58 96 C55 98 53 95 54 92 L57 85 C58 82 61 80 65 78 L77 70 C81 67 83 62 83 57 C83 54 87 54 88 58 Z' fill='white'/%3E%3C/svg%3E" />
+
+  <!-- Tipografia Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Estilos do Aplicativo -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Símbolo Vetorial Exclusivo do cuidAÇÃO -->
+  <svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <defs>
+      <g id="cuidacao-symbol">
+        <path d="M48 14 C28 18 18 36 23 56 C26 67 36 74 47 76 C47 56 44 37 36 26 C41 34 46 49 48 68 C51 47 52 27 48 14 Z" fill="currentColor" />
+        <path d="M51 31 C56 23 68 23 75 30 C82 37 81 50 71 61 C64 68 55 74 49 78 C48 61 48 44 51 31 Z" fill="currentColor" />
+        <path d="M12 58 C10 68 15 79 25 86 L42 96 C45 98 47 95 46 92 L43 85 C42 82 39 80 35 78 L23 70 C19 67 17 62 17 57 C17 54 13 54 12 58 Z" fill="currentColor" />
+        <path d="M88 58 C90 68 85 79 75 86 L58 96 C55 98 53 95 54 92 L57 85 C58 82 61 80 65 78 L77 70 C81 67 83 62 83 57 C83 54 87 54 88 58 Z" fill="currentColor" />
+      </g>
+    </defs>
+  </svg>
+
+  <!-- MOLDURA MOBILE DO APLICATIVO -->
+  <div class="mobile-device">
+    <div class="device-notch"></div>
+
+    <!-- ==================== TELA DE LOGIN OBRIGATÓRIO ==================== -->
+    <div id="loginScreenOverlay" class="login-overlay">
+      <div class="login-top-bar">
+        <div class="login-top-actions">
+          <button type="button" class="circle-btn" onclick="toggleQuickThemeFromLogin()" title="Alternar tema" aria-label="Alternar tema">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+          </button>
+          <button type="button" class="circle-btn green-a11y" onclick="stepFontSize(1)" title="Aumentar fonte" aria-label="Aumentar fonte">
+            <span style="font-size:0.72rem; font-weight:800;">A+</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-scroll-body">
+        <div class="login-brand-hero">
+          <div class="login-logo-box">
+            <svg width="36" height="36" viewBox="0 0 100 100">
+              <use href="#cuidacao-symbol"></use>
+            </svg>
+          </div>
+          <h1 class="login-brand-title">cuid<strong>AÇÃO</strong></h1>
+          <p class="login-brand-subtitle">Plataforma integrada de Saúde Pública, Meio Ambiente e Proteção Animal</p>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button type="button" id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Entrar</button>
+            <button type="button" id="tabBtnRegister" class="auth-tab-btn" onclick="switchAuthTab('register')">Criar Conta</button>
+          </div>
+
+          <!-- Formulário de Login -->
+          <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+            <div class="form-field">
+              <label for="loginIdentifier">E-mail, CPF ou Cartão SUS</label>
+              <input
+                type="text"
+                id="loginIdentifier"
+                class="form-input"
+                placeholder="Digite seu CPF, e-mail ou CNS"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="loginPassword">Senha de Acesso</label>
+              <div class="password-field-wrap">
+                <input
+                  type="password"
+                  id="loginPassword"
+                  class="form-input"
+                  placeholder="Digite sua senha"
+                  required
+                />
+                <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Mostrar ou ocultar senha">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="login-aux-row">
+              <label class="remember-label">
+                <input type="checkbox" checked />
+                <span>Manter conectado</span>
+              </label>
+              <button type="button" class="text-link-btn" onclick="handleForgotPassword()">Esqueci a senha</button>
+            </div>
+
+            <button type="submit" class="btn-main">Acessar Plataforma</button>
+
+            <div class="demo-autofill-bar">
+              <span>Acesso rápido para avaliação:</span>
+              <button type="button" class="text-link-btn" onclick="fillDemoCredentials()">Preencher credenciais de teste</button>
+            </div>
+          </form>
+
+          <!-- Formulário de Cadastro -->
+          <form id="registerForm" onsubmit="handleRegisterSubmit(event)" style="display:none;">
+            <div class="form-field">
+              <label for="regName">Nome Completo</label>
+              <input type="text" id="regName" class="form-input" placeholder="Seu nome completo" required />
+            </div>
+
+            <div class="form-field">
+              <label for="regDoc">CPF ou Cartão Nacional de Saúde (SUS)</label>
+              <input type="text" id="regDoc" class="form-input" placeholder="000.000.000-00" required />
+            </div>
+
+            <div class="form-field">
+              <label for="regBairro">Bairro de Residência</label>
+              <select id="regBairro" class="form-input" required>
+                <option value="Vicente de Carvalho">Vicente de Carvalho</option>
+                <option value="Vila Maia">Vila Maia</option>
+                <option value="Pitangueiras">Pitangueiras</option>
+                <option value="Enseada">Enseada</option>
+                <option value="Paecara">Paecara</option>
+                <option value="Astúrias">Astúrias</option>
+                <option value="Jardim Boa Esperança">Jardim Boa Esperança</option>
+                <option value="Outro">Outro Bairro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="regPassword">Criar Senha</label>
+              <input type="password" id="regPassword" class="form-input" placeholder="Mínimo de 6 caracteres" minlength="6" required />
+            </div>
+
+            <button type="submit" class="btn-main">Concluir Cadastro e Entrar</button>
+          </form>
+        </div>
+
+        <p class="login-footer-note">
+          Acesso autenticado integrado aos serviços de assistência farmacêutica, zeladoria ambiental e rede de proteção animal.
+        </p>
+      </div>
+    </div>
+
+    <!-- ==================== CABEÇALHO DO APLICATIVO ==================== -->
+    <header class="app-header">
+      <button class="app-brand" onclick="openAppScreen('inicio')" aria-label="Ir para o Início">
+        <div class="app-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 100 100">
+            <use href="#cuidacao-symbol"></use>
+          </svg>
+        </div>
+        <span class="app-brand-name">cuid<strong>AÇÃO</strong></span>
+      </button>
+
+      <div class="app-header-actions">
+        <!-- Atalho Rápido de Acessibilidade -->
+        <button class="circle-btn green-a11y" onclick="openAppScreen('configuracoes')" title="Acessibilidade e Aparência" aria-label="Acessibilidade">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="2"/>
+            <path d="M5 9h14M12 9v11M9 20l3-6 3 6"/>
+          </svg>
+        </button>
+
+        <!-- Notificações -->
+        <button class="circle-btn" onclick="openNotificationsSheet()" title="Notificações" aria-label="Notificações">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span id="notifBadge" class="notif-dot"></span>
+        </button>
+
+        <!-- Configurações -->
+        <button class="circle-btn" onclick="openAppScreen('configuracoes')" title="Configurações" aria-label="Configurações">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== ÁREA ROLÁVEL PRINCIPAL ==================== -->
+    <main class="app-scroll-content" id="mainScrollArea">
+
+      <!-- ==================== TELA 1: INÍCIO ==================== -->
+      <section id="screen-inicio" class="app-screen active">
+        <h1 class="welcome-title" id="welcomeHeaderTitle">Olá! Como podemos<br>cuidar de você hoje?</h1>
+
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="search"
+            id="homeSearchInput"
+            class="search-input"
+            placeholder="O que você está procurando?"
+            aria-label="O que você está procurando?"
+            oninput="filterHomeContent(this.value)"
+          />
+          <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearHomeSearch()" aria-label="Limpar pesquisa">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Grade 2x3 com os 6 Serviços Principais (Sem Subtítulos) -->
+        <div class="services-grid" id="homeServicesGrid">
+          <!-- 1. Guia de Medicamentos -->
+          <div class="service-card priority" data-keywords="farmacia basica popular medicamentos remedios receita ubs remume rename dosagem" onclick="openAppScreen('saude')">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                <path d="m8.5 8.5 7 7"/>
+              </svg>
+            </div>
+            <span class="service-name">Guia de Medicamentos</span>
+          </div>
+
+          <!-- 2. Denúncias Ambientais -->
+          <div class="service-card priority" data-keywords="denuncias ambientais poluicao lixo queimadas descarte irregular meio ambiente" onclick="selectDenunciaType('ambiental')">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+            </div>
+            <span class="service-name">Denúncias Ambientais</span>
+          </div>
+
+          <!-- 3. Maus-tratos a Animais -->
+          <div class="service-card priority" data-keywords="maus-tratos animais protecao animal abandono resgate bem-estar zoonoses" onclick="selectDenunciaType('animal')">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/>
+                <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>
+              </svg>
+            </div>
+            <span class="service-name">Maus-tratos a Animais</span>
+          </div>
+
+          <!-- 4. Notícias de Saúde -->
+          <div class="service-card" data-keywords="noticias saude vacinacao prevencao campanhas qualidade de vida ubs" onclick="scrollToHomeNews()">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+                <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+              </svg>
+            </div>
+            <span class="service-name">Notícias de Saúde</span>
+          </div>
+
+          <!-- 5. Comunidade -->
+          <div class="service-card" data-keywords="comunidade mutirao acoes bairro moradores conscientizacao" onclick="openAppScreen('comunidade')">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <span class="service-name">Comunidade</span>
+          </div>
+
+          <!-- 6. Mapa de ONGs -->
+          <div class="service-card" data-keywords="mapa ongs organizacoes protecao animal meio ambiente saude apoio" onclick="openAppScreen('mapa')">
+            <div class="service-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <span class="service-name">Mapa</span>
+          </div>
+        </div>
+
+        <!-- Seção Saúde em Foco -->
+        <div class="section-heading" id="homeNewsHeader">
+          <h2>Saúde em Foco</h2>
+          <button type="button" onclick="openAppScreen('saude')">Ver medicamentos</button>
+        </div>
+
+        <div class="focus-list" id="homeNewsList"></div>
+
+        <!-- Seção Nossa Comunidade (Prévia) -->
+        <div class="section-heading">
+          <h2>Nossa comunidade</h2>
+          <button type="button" onclick="openAppScreen('comunidade')">Ver mural completo</button>
+        </div>
+
+        <div id="homeCommunityPreview"></div>
+      </section>
+
+      <!-- ==================== TELA 2: GUIA DE MEDICAMENTOS & FARMÁCIA POPULAR ==================== -->
+      <section id="screen-saude" class="app-screen">
+        <div class="screen-header-bar">
+          <h2>Assistência Farmacêutica</h2>
+        </div>
+
+        <!-- Alternador Rápido: Catálogo RENAME vs Busca por Farmácia Popular -->
+        <div class="pill-row" style="margin-bottom:12px;">
+          <button type="button" id="subTabMedCatalogo" class="pill-btn active" onclick="switchSaudeSubTab('catalogo')">
+            Catálogo RENAME e Alertas
+          </button>
+          <button type="button" id="subTabFarmaciaPop" class="pill-btn" onclick="switchSaudeSubTab('popular')">
+            Buscar Farmácia Popular
+          </button>
+        </div>
+
+        <!-- SUB-ABA 1: CATÁLOGO DE MEDICAMENTOS E NOTIFICAÇÃO DE CHEGADA -->
+        <div id="saudeCatalogoView">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="search"
+              id="medSearchInput"
+              class="search-input"
+              placeholder="Buscar princípio ativo (ex: Losartana, Amoxicilina...)"
+              oninput="searchMedicamentos(this.value)"
+            />
+          </div>
+
+          <div class="pill-row">
+            <button type="button" class="pill-btn active" data-medfilter="todos" onclick="filterMedByCategory('todos', this)">Todos</button>
+            <button type="button" class="pill-btn" data-medfilter="pressao" onclick="filterMedByCategory('pressao', this)">Hipertensão</button>
+            <button type="button" class="pill-btn" data-medfilter="diabetes" onclick="filterMedByCategory('diabetes', this)">Diabetes</button>
+            <button type="button" class="pill-btn" data-medfilter="antibiotico" onclick="filterMedByCategory('antibiotico', this)">Antibióticos</button>
+            <button type="button" class="pill-btn" data-medfilter="dor" onclick="filterMedByCategory('dor', this)">Dor e Febre</button>
+          </div>
+
+          <div class="app-card subtle-banner">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">
+              <strong style="font-size:calc(0.8rem * var(--font-scale)); color:var(--brand-primary);">
+                Documentação para dispensação
+              </strong>
+              <button type="button" class="pill-btn" style="padding:4px 10px; font-size:calc(0.68rem * var(--font-scale));" onclick="openNotificationsSheet()">
+                Central de Avisos
+              </button>
+            </div>
+            <p style="font-size:calc(0.74rem * var(--font-scale)); color:var(--text-secondary); line-height:1.4;">
+              Apresente documento oficial com foto, Cartão Nacional de Saúde (SUS) e receita médica válida. Ative o alerta em qualquer item abaixo para ser avisado quando novos lotes chegarem.
+            </p>
+          </div>
+
+          <div id="medicamentosListContainer"></div>
+        </div>
+
+        <!-- SUB-ABA 2: BUSCA POR FARMÁCIA POPULAR -->
+        <div id="saudeFarmaciaPopularView" style="display:none;">
+          <div class="app-card subtle-banner">
+            <span class="badge-pill">Programa Farmácia Popular</span>
+            <h3 style="font-size:calc(0.86rem * var(--font-scale)); font-weight:700; margin-bottom:4px;">
+              Consulta de unidades credenciadas
+            </h3>
+            <p style="font-size:calc(0.74rem * var(--font-scale)); color:var(--text-secondary); line-height:1.4;">
+              Pesquise por CEP (integrado à base ViaCEP), bairro ou município para localizar estabelecimentos credenciados pelo Ministério da Saúde.
+            </p>
+          </div>
+
+          <div class="app-card">
+            <form onsubmit="handleFarmaciaPopularSearch(event)">
+              <div class="form-field">
+                <label for="fpSearchInput">Cidade, Bairro ou CEP</label>
+                <div style="display:flex; gap:6px;">
+                  <input
+                    type="search"
+                    id="fpSearchInput"
+                    class="form-input"
+                    placeholder="Ex.: 11410-000, Pitangueiras, Vicente de Carvalho..."
+                    oninput="searchFarmaciaPopularLive(this.value)"
+                  />
+                  <button type="submit" class="btn-main" style="width:auto; white-space:nowrap; padding:0 14px;">Buscar</button>
+                </div>
+              </div>
+
+              <div class="pill-row" style="margin-bottom:0; padding-bottom:2px;">
+                <button type="button" class="pill-btn active" data-fpquick="todos" onclick="quickFilterFarmaciaPopular('', this)">Todas</button>
+                <button type="button" class="pill-btn" data-fpquick="Guarujá" onclick="quickFilterFarmaciaPopular('Guarujá', this)">Guarujá</button>
+                <button type="button" class="pill-btn" data-fpquick="Vicente de Carvalho" onclick="quickFilterFarmaciaPopular('Vicente de Carvalho', this)">Vicente de Carvalho</button>
+                <button type="button" class="pill-btn" data-fpquick="Pitangueiras" onclick="quickFilterFarmaciaPopular('Pitangueiras', this)">Pitangueiras</button>
+                <button type="button" class="pill-btn" data-fpquick="Vila Maia" onclick="quickFilterFarmaciaPopular('Vila Maia', this)">Vila Maia</button>
+                <button type="button" class="pill-btn" data-fpquick="Santos" onclick="quickFilterFarmaciaPopular('Santos', this)">Santos</button>
+              </div>
+            </form>
+
+            <div id="fpCepApiStatus" class="cep-status-box" style="display:none;"></div>
+          </div>
+
+          <div class="section-heading">
+            <h2>Estabelecimentos Credenciados</h2>
+            <span id="fpCountLabel" style="font-size:calc(0.73rem * var(--font-scale)); font-weight:600; color:var(--brand-primary);"></span>
+          </div>
+
+          <div id="farmaciaPopularResultsContainer"></div>
+        </div>
+      </section>
+
+      <!-- ==================== TELA 3: DENÚNCIAS ==================== -->
+      <section id="screen-denuncias" class="app-screen">
+        <div class="screen-header-bar">
+          <h2>Central de Fiscalização e Denúncias</h2>
+        </div>
+
+        <div class="pill-row">
+          <button type="button" id="pillDenAmbiental" class="pill-btn active" onclick="selectDenunciaType('ambiental')">
+            Ocorrência Ambiental
+          </button>
+          <button type="button" id="pillDenAnimal" class="pill-btn" onclick="selectDenunciaType('animal')">
+            Proteção e Bem-Estar Animal
+          </button>
+        </div>
+
+        <div class="app-card">
+          <form onsubmit="handleDenunciaSubmit(event)">
+            <input type="hidden" id="denunciaCatInput" value="Ambiental" />
+
+            <div class="form-field">
+              <label for="denunciaSelectTipo">Natureza da Ocorrência</label>
+              <select id="denunciaSelectTipo" class="form-input" required></select>
+            </div>
+
+            <div class="form-field">
+              <label for="denunciaLocalInput">Endereço ou Ponto de Referência</label>
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="denunciaLocalInput" class="form-input" placeholder="Ex.: Av. Dom Pedro I, próximo ao nº 900" required />
+                <button type="button" class="btn-outline" style="width:auto; white-space:nowrap; padding:0 12px; display:inline-flex; align-items:center; gap:5px;" onclick="useGpsLocation()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                  </svg>
+                  <span>GPS</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="denunciaDescInput">Descrição Técnica do Relato</label>
+              <textarea id="denunciaDescInput" rows="3" class="form-input" placeholder="Relate os detalhes observados para orientar a equipe de vistoria..." required maxlength="300"></textarea>
+              <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                 <span id="contadorCaracteresDenuncia" style="font-size: calc(0.7rem * var(--font-scale)); color: var(--text-muted);">0 / 300</span>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="denunciaImagemInput">Evidência Fotográfica (Opcional)</label>
+              <label for="denunciaImagemInput" class="upload-file-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Selecionar imagem do dispositivo</span>
+              </label>
+              <input
+                type="file"
+                id="denunciaImagemInput"
+                accept="image/*"
+                class="hidden-file-input"
+                onchange="handleImageFileSelect(this, 'denunciaImgPreviewWrap', 'denunciaImgPreview')"
+              />
+              <div id="denunciaImgPreviewWrap" class="img-preview-wrap" style="display:none;">
+                <img id="denunciaImgPreview" src="" alt="Prévia da imagem da denúncia" class="img-preview-thumb" />
+                <button type="button" class="remove-img-btn" onclick="clearSelectedImage('denunciaImagemInput', 'denunciaImgPreviewWrap', 'denunciaImgPreview')">Remover imagem</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-main">Registrar Ocorrência e Gerar Protocolo</button>
+          </form>
+        </div>
+
+        <div class="section-heading">
+          <h2>Protocolos Registrados</h2>
+        </div>
+        <div id="denunciasHistoryList"></div>
+      </section>
+
+      <!-- ==================== TELA 4: COMUNIDADE ==================== -->
+      <section id="screen-comunidade" class="app-screen">
+        <div class="screen-header-bar">
+          <h2>Mural Comunitário</h2>
+        </div>
+
+        <div class="app-card">
+          <form onsubmit="handlePostSubmit(event)">
+            <div class="form-field">
+              <label for="postAutor">Responsável ou Coletivo</label>
+              <input type="text" id="postAutor" class="form-input" placeholder="Ex.: Associação de Moradores Vila Maia" required disabled/>
+            </div>
+
+            <div class="form-field">
+              <label for="postTema">Área Temática</label>
+              <select id="postTema" class="form-input">
+                <option value="Ação Comunitária">Ação Comunitária</option>
+                <option value="Preservação Ambiental">Preservação Ambiental</option>
+                <option value="Proteção Animal">Proteção Animal</option>
+                <option value="Saúde Pública">Saúde Pública</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="postTexto">Comunicado para a Comunidade</label>
+              <textarea id="postTexto" rows="2" class="form-input" placeholder="Informe local, data, horário e orientações para participação..." required maxlength="400"></textarea>
+               <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                 <span id="contadorCaracteresMural" style="font-size: calc(0.7rem * var(--font-scale)); color: var(--text-muted);">0 / 400</span>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="postImagemInput">Imagem da Ação (Opcional)</label>
+              <label for="postImagemInput" class="upload-file-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Anexar fotografia da galeria</span>
+              </label>
+              <input
+                type="file"
+                id="postImagemInput"
+                accept="image/*"
+                class="hidden-file-input"
+                onchange="handleImageFileSelect(this, 'postImgPreviewWrap', 'postImgPreview')"
+              />
+              <div id="postImgPreviewWrap" class="img-preview-wrap" style="display:none;">
+                <img id="postImgPreview" src="" alt="Prévia da imagem da publicação" class="img-preview-thumb" />
+                <button type="button" class="remove-img-btn" onclick="clearSelectedImage('postImagemInput', 'postImgPreviewWrap', 'postImgPreview')">Remover imagem</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-main">Publicar no Mural</button>
+          </form>
+        </div>
+
+        <div class="section-heading">
+          <h2>Iniciativas em Destaque</h2>
+          <span style="font-size:calc(0.71rem * var(--font-scale)); color:var(--text-muted); font-weight:600;">Ordenado por relevância</span>
+        </div>
+        <div id="communityFeedList"></div>
+      </section>
+
+      <!-- ==================== TELA 5: MAPA DE ONGs ==================== -->
+      <section id="screen-mapa" class="app-screen">
+        <div class="screen-header-bar">
+          <h2>Rede de ONGs e Apoio Social</h2>
+        </div>
+
+        <div class="pill-row">
+          <button type="button" class="pill-btn active" data-mapfilter="todos" onclick="filterMapPoints('todos', this)">Todas as ONGs</button>
+          <button type="button" class="pill-btn" data-mapfilter="saude" onclick="filterMapPoints('saude', this)">Saúde Pública</button>
+          <button type="button" class="pill-btn" data-mapfilter="ambiental" onclick="filterMapPoints('ambiental', this)">Meio Ambiente</button>
+          <button type="button" class="pill-btn" data-mapfilter="animal" onclick="filterMapPoints('animal', this)">Proteção Animal</button>
+          <button type="button" class="pill-btn" data-mapfilter="popular" onclick="filterMapPoints('popular', this)">Farmácia Popular</button>
+        </div>
+
+        <!-- Contentor do Leaflet -->
+        <div id="mobile-map"></div>
+
+        <!-- Lista de ONGs sincronizada -->
+        <div id="mapLocationsContainer"></div>
+      </section>
+
+      <!-- ==================== TELA 6: CONFIGURAÇÕES E ACESSIBILIDADE ==================== -->
+      <section id="screen-configuracoes" class="app-screen">
+        <div class="screen-header-bar">
+          <h2>Configurações do Sistema</h2>
+        </div>
+
+        <!-- Perfil Conectado -->
+        <h3 class="settings-section-title">Conta Conectada</h3>
+        <div class="app-card user-profile-card">
+          <div class="user-profile-row">
+            <div class="user-avatar-badge" id="settingsUserAvatar">MC</div>
+            <div class="user-profile-info">
+              <strong id="settingsUserName">Morador Conectado</strong>
+              <span id="settingsUserMeta">Cadastro verificado</span>
+            </div>
+          </div>
+          <button type="button" class="btn-outline logout-btn" onclick="handleLogout()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Encerrar sessão</span>
+          </button>
+        </div>
+
+        <!-- Aparência -->
+        <h3 class="settings-section-title">Aparência</h3>
+        <div class="theme-cards-row">
+          <button type="button" class="theme-card-btn" id="themeBtn-light" onclick="setAppTheme('light')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <span>Modo Claro</span>
+          </button>
+          <button type="button" class="theme-card-btn" id="themeBtn-dark" onclick="setAppTheme('dark')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span>Modo Escuro</span>
+          </button>
+          <button type="button" class="theme-card-btn" id="themeBtn-auto" onclick="setAppTheme('auto')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            <span>Automático</span>
+          </button>
+        </div>
+
+        <!-- Acessibilidade: Tamanho das Letras -->
+        <h3 class="settings-section-title">Escala Tipográfica</h3>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button type="button" class="btn-outline" onclick="stepFontSize(-1)">A- Reduzir</button>
+          <button type="button" class="btn-outline" onclick="stepFontSize(1)">A+ Ampliar</button>
+        </div>
+
+        <div class="slider-wrap">
+          <input
+            type="range"
+            id="fontSlider"
+            class="font-range-input"
+            min="0"
+            max="2"
+            step="1"
+            value="1"
+            oninput="applyFontScaleByIndex(this.value)"
+            aria-label="Ajuste do tamanho das letras"
+          />
+        </div>
+
+        <div class="slider-labels">
+          <span id="fontLbl-0" onclick="applyFontScaleByIndex(0)" style="cursor:pointer;">Compacto</span>
+          <span id="fontLbl-1" class="active-label" onclick="applyFontScaleByIndex(1)" style="cursor:pointer;">Padrão</span>
+          <span id="fontLbl-2" onclick="applyFontScaleByIndex(2)" style="cursor:pointer;">Ampliado</span>
+        </div>
+
+        <button type="button" class="btn-outline" onclick="applyFontScaleByIndex(1); showToast('Escala tipográfica padrão restaurada.');">
+          Restaurar escala padrão
+        </button>
+
+        <div class="text-preview-card">
+          Exemplo de adaptação dinâmica dos textos da interface para leitura confortável e acessível.
+        </div>
+
+        <!-- Preferências Gerais -->
+        <h3 class="settings-section-title" style="margin-top:18px;">Notificações do Usuário</h3>
+        <div class="app-card" style="display:flex; flex-direction:column; gap:12px;">
+          <label class="pref-toggle-row">
+            <span>Alertas de reposição de estoque de medicamentos</span>
+            <input type="checkbox" id="prefMedAlerts" checked onchange="showToast('Preferência atualizada.')" />
+          </label>
+          <label class="pref-toggle-row">
+            <span>Comunicados de mutirões e ações das ONGs</span>
+            <input type="checkbox" checked onchange="showToast('Preferência atualizada.')" />
+          </label>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== BARRA DE NAVEGAÇÃO INFERIOR FIXA ==================== -->
+    <nav class="app-bottom-nav" aria-label="Navegação do Aplicativo">
+      <button type="button" class="nav-tab active" data-tab="inicio" onclick="openAppScreen('inicio')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Início</span>
+      </button>
+
+      <button type="button" class="nav-tab" data-tab="saude" onclick="openAppScreen('saude')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+          <path d="m8.5 8.5 7 7"/>
+        </svg>
+        <span>Farmácia</span>
+      </button>
+
+      <button type="button" class="nav-tab" data-tab="denuncias" onclick="openAppScreen('denuncias')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Denúncias</span>
+      </button>
+
+      <button type="button" class="nav-tab" data-tab="comunidade" onclick="openAppScreen('comunidade')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        <span>Comunidade</span>
+      </button>
+
+      <button type="button" class="nav-tab" data-tab="mapa" onclick="openAppScreen('mapa')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Mapa</span>
+      </button>
+    </nav>
+
+    <!-- ==================== PAINEL DESLIZANTE DE NOTIFICAÇÕES ==================== -->
+    <div id="notificationsSheet" class="inapp-sheet-backdrop" onclick="closeNotificationsSheet()">
+      <div class="inapp-sheet" onclick="event.stopPropagation()">
+        <div class="sheet-top-bar">
+          <div>
+            <h3 style="font-size:calc(0.96rem * var(--font-scale)); font-weight:700;">Central de Notificações</h3>
+            <span id="notifSheetSummary" style="font-size:calc(0.72rem * var(--font-scale)); color:var(--text-secondary);"></span>
+          </div>
+          <button type="button" class="sheet-close-btn" onclick="closeNotificationsSheet()" aria-label="Fechar notificações">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div style="display:flex; gap:6px; margin-bottom:12px;">
+          <button type="button" class="pill-btn active" id="notifFilterAll" onclick="setNotifFilter('todas')">Todas</button>
+          <button type="button" class="pill-btn" id="notifFilterUnread" onclick="setNotifFilter('naolidas')">Não lidas</button>
+          <button type="button" class="pill-btn" style="margin-left:auto;" onclick="markAllNotificationsRead()">Marcar todas como lidas</button>
+        </div>
+
+        <div id="notificationsListContainer"></div>
+      </div>
+    </div>
+
+    <!-- ==================== PAINEL DE LEITURA COMPLETA DE NOTÍCIA ==================== -->
+    <div id="newsDetailSheet" class="inapp-sheet-backdrop" onclick="closeNewsDetailSheet()">
+      <div class="inapp-sheet" onclick="event.stopPropagation()">
+        <div class="sheet-top-bar">
+          <span id="detailNewsCat" class="badge-pill" style="margin:0;">Saúde em Foco</span>
+          <button type="button" class="sheet-close-btn" onclick="closeNewsDetailSheet()" aria-label="Fechar notícia">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <img id="detailNewsImg" src="" alt="" style="width:100%; height:155px; object-fit:cover; border-radius:12px; margin-bottom:12px;" />
+        <h3 id="detailNewsTitle" style="font-size:calc(0.96rem * var(--font-scale)); font-weight:700; margin-bottom:4px;"></h3>
+        <p id="detailNewsDate" style="font-size:calc(0.70rem * var(--font-scale)); color:var(--text-muted); margin-bottom:10px;"></p>
+        <p id="detailNewsText" style="font-size:calc(0.81rem * var(--font-scale)); color:var(--text-secondary); line-height:1.52; margin-bottom:16px;"></p>
+        <button type="button" class="btn-main" onclick="closeNewsDetailSheet(); openAppScreen('saude');">Consultar Catálogo de Medicamentos</button>
+      </div>
+    </div>
+
+    <!-- ==================== TOAST IN-APP ==================== -->
+    <div id="appToast" class="inapp-toast">
+      <span id="appToastMsg">Operação concluída</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Lógica do Aplicativo -->
+  <script src="script.js"></script>
+</body>
+</html>
